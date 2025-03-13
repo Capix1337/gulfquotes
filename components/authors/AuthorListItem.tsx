@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
-// import { cn } from "@/lib/utils"
 import { getAuthorAvatarUrl } from "@/lib/utils/image-management"
 import { AuthorFollowButton } from "@/app/(general)/authors/components/author-follow-button" 
 import { Book } from "lucide-react"
@@ -26,6 +25,17 @@ export function AuthorListItem({ author, variant = "default" }: AuthorListItemPr
     console.warn(`Failed to load avatar image for author: ${author.name}`);
     setImageError(true);
   };
+  
+  // Extract year from the born string if available
+  const extractBirthYear = (born?: string | null): number | null => {
+    if (!born) return null;
+    
+    // Try to extract a 4-digit year from the born string
+    const yearMatch = born.match(/\b(19|20)\d{2}\b/);
+    return yearMatch ? parseInt(yearMatch[0]) : null;
+  };
+  
+  const birthYear = extractBirthYear(author.born);
   
   if (variant === "compact") {
     return (
@@ -90,8 +100,8 @@ export function AuthorListItem({ author, variant = "default" }: AuthorListItemPr
                 <Book className="h-3.5 w-3.5" /> 
                 {author.quoteCount} quotes
               </span>
-              {author.bornYear && (
-                <span>Born: {author.bornYear}</span>
+              {birthYear && (
+                <span>Born: {birthYear}</span>
               )}
             </div>
             
