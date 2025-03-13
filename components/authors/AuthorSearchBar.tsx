@@ -5,13 +5,6 @@ import { Search } from "lucide-react"
 import { useCallback, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useDebouncedCallback } from "use-debounce"
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
 export function AuthorSearchBar() {
   const router = useRouter()
@@ -29,17 +22,6 @@ export function AuthorSearchBar() {
     params.set("page", "1")
     router.push(`${pathname}?${params.toString()}`)
   }, 300)
-
-  const handleFilter = (filter: string, value: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (value === "all") {
-      params.delete(filter)
-    } else {
-      params.set(filter, value)
-    }
-    params.set("page", "1")
-    router.push(`${pathname}?${params.toString()}`)
-  }
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,23 +41,6 @@ export function AuthorSearchBar() {
           value={value}
           className="pl-8"
         />
-      </div>
-      <div className="flex gap-2">
-        <Select
-          onValueChange={(value) => handleFilter("era", value)}
-          defaultValue={searchParams.get("era") || "all"}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Era" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Eras</SelectItem>
-            <SelectItem value="ancient">Ancient</SelectItem>
-            <SelectItem value="medieval">Medieval</SelectItem>
-            <SelectItem value="modern">Modern</SelectItem>
-            <SelectItem value="contemporary">Contemporary</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
     </div>
   )
