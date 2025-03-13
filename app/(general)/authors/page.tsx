@@ -56,7 +56,7 @@ export default async function AuthorsPage({
     }
 
     return (
-      <div className="container space-y-8 py-8">
+      <div className="container max-w-4xl mx-auto space-y-8 py-8">
         <AuthorHeader />
         <ErrorBoundary>
           <div className="flex flex-col gap-6">
@@ -66,20 +66,15 @@ export default async function AuthorsPage({
               </div>
             </div>
             
-            {/* Add DateSelector component */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <div className="w-full md:w-auto">
-                <DateSelector className="mb-4" />
-              </div>
-            </div>
-
             <AlphabetNav />
+            
             <Suspense fallback={<AuthorSkeleton />}>
               <AuthorGrid 
                 authors={result.data.items} 
                 isLoading={false} 
               />
             </Suspense>
+            
             <AuthorPagination
               currentPage={page}
               totalPages={Math.ceil(result.data.total / limit)}
