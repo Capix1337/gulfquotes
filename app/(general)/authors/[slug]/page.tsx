@@ -85,6 +85,9 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
       diedMonth: author.diedMonth,
       diedYear: author.diedYear,
       birthPlace: author.birthPlace,
+      // Add external link fields
+      externalLinkTitle: author.externalLinkTitle,
+      externalLinkUrl: author.externalLinkUrl,
       image: author.images[0]?.url || null,
       influences: author.influences,
       quoteCount: quoteCount,
@@ -103,6 +106,8 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
           <AuthorBioSection 
             bio={author.bio} 
             influences={author.influences}
+            externalLinkTitle={author.externalLinkTitle}
+            externalLinkUrl={author.externalLinkUrl}
           />
         </Suspense>
         

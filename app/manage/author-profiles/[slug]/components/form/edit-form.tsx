@@ -45,6 +45,9 @@ export function EditForm({ author }: EditFormProps) {
       birthPlace: author.birthPlace || "",
       influences: author.influences || "",
       bio: author.bio,
+      // Add external link fields
+      externalLinkTitle: author.externalLinkTitle || "",
+      externalLinkUrl: author.externalLinkUrl || "",
       images: author.images || [],
     },
   });

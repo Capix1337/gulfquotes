@@ -2,15 +2,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { parseInfluences } from "@/lib/utils/author-profile";
 import { Badge } from "@/components/ui/badge";
-// import { cn } from "@/lib/utils";
+import { AuthorExternalLink } from "./AuthorExternalLink"; // Add this import
 
 interface AuthorBioSectionProps {
   bio: string | null;
   influences?: string | null;
+  externalLinkTitle?: string | null; // Add this
+  externalLinkUrl?: string | null;   // Add this
   className?: string;
 }
 
-export function AuthorBioSection({ bio, influences, className }: AuthorBioSectionProps) {
+export function AuthorBioSection({ 
+  bio, 
+  influences, 
+  externalLinkTitle, 
+  externalLinkUrl, 
+  className 
+}: AuthorBioSectionProps) {
   // Parse influences into an array
   const influencesList = parseInfluences(influences);
   
@@ -28,6 +36,12 @@ export function AuthorBioSection({ bio, influences, className }: AuthorBioSectio
         ) : (
           <p className="text-muted-foreground italic">No biography available.</p>
         )}
+        
+        {/* External Link - Add this section */}
+        <AuthorExternalLink 
+          title={externalLinkTitle ?? null} 
+          url={externalLinkUrl ?? null} 
+        />
         
         {/* Influences */}
         {influencesList.length > 0 && (
