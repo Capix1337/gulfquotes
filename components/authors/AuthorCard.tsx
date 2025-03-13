@@ -4,12 +4,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { getAuthorAvatarUrl } from "@/lib/utils/image-management"
 
 interface AuthorCardProps {
   author: Author
 }
 
 export function AuthorCard({ author }: AuthorCardProps) {
+  // Transform the author image URL for optimal avatar display
+  const avatarUrl = getAuthorAvatarUrl(author.image, 200);
+  
   return (
     <Link href={`/authors/${author.slug}`}>
       <Card className={cn(
@@ -18,7 +22,11 @@ export function AuthorCard({ author }: AuthorCardProps) {
       )}>
         <CardHeader className="flex flex-row items-center gap-4 p-4">
           <Avatar className="h-12 w-12">
-            <AvatarImage src={author.image || ""} alt={author.name} />
+            <AvatarImage 
+              src={avatarUrl} 
+              alt={author.name} 
+              className="object-cover" // Ensure image maintains aspect ratio
+            />
             <AvatarFallback>{author.name[0]}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">

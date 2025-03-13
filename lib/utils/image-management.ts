@@ -199,3 +199,36 @@ export function handleDeleteError(error: unknown): never {
   const message = error instanceof Error ? error.message : "Failed to delete image";
   throw new AppError(message, "IMAGE_DELETE_FAILED", 500);
 }
+
+/**
+ * Get an optimized author avatar URL with proper square cropping
+ * @param imageUrl The original image URL
+ * @param size The size of the avatar (both width and height)
+ * @returns Transformed URL for optimal avatar display
+ */
+export function getAuthorAvatarUrl(imageUrl: string | null | undefined, size: number = 200): string {
+  if (!imageUrl) return "";
+  
+  // Check if it's a Cloudinary URL
+  if (imageUrl.includes(`cloudinary.com/${cloudinaryConfig.cloudName}`)) {
+    // Extract the public ID from the URL
+    // This assumes the URL format follows Cloudinary's standard pattern
+    const regex = /\/upload\/(?:v\d+\/)?([^/]+)(?:\.\w+)?$/;
+    const match = imageUrl.match(regex);
+    const publicId = match ? match[1] : null;
+    
+    if (publicId) {
+      // Apply avatar-specific transformations
+      return buildImageUrl(publicId, {
+        width: size,
+        height: size,
+        crop: 'fill',
+        gravity: 'face',
+        quality: 'auto'
+      });
+    }
+  }
+  
+  // Return original URL for non-Cloudinary images or if extraction fails
+  return imageUrl;
+}

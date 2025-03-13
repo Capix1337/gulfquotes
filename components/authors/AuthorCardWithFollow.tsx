@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Users } from "lucide-react";
 import { AuthorFollowButton } from "@/app/(general)/authors/components/author-follow-button";
 import { useState } from "react";
+import { getAuthorAvatarUrl } from "@/lib/utils/image-management";
 
 interface AuthorCardWithFollowProps {
   author: Author;
@@ -17,6 +18,9 @@ export function AuthorCardWithFollow({ author }: AuthorCardWithFollowProps) {
   // State to track follow changes locally
   const [currentFollowers, setCurrentFollowers] = useState(author.followers);
   const [isFollowed, setIsFollowed] = useState(author.isFollowed);
+  
+  // Transform the author image URL for optimal avatar display
+  const avatarUrl = getAuthorAvatarUrl(author.image, 200);
 
   // Format the follower count for display
   const formatFollowerCount = (count: number) => {
@@ -48,7 +52,11 @@ export function AuthorCardWithFollow({ author }: AuthorCardWithFollowProps) {
             "h-12 w-12",
             isFollowed && "ring-2 ring-primary/20"
           )}>
-            <AvatarImage src={author.image || ""} alt={author.name} />
+            <AvatarImage 
+              src={avatarUrl} 
+              alt={author.name} 
+              className="object-cover" 
+            />
             <AvatarFallback>{author.name[0]}</AvatarFallback>
           </Avatar>
         </Link>

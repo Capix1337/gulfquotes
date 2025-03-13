@@ -1,6 +1,7 @@
 // components/authors/AuthorPageHeader.tsx
 "use client";
 
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Author } from "@/types/author";
@@ -8,6 +9,7 @@ import { AuthorFollowButton } from "@/app/(general)/authors/components/author-fo
 import { Book, Users, Calendar } from "lucide-react";
 import Link from "next/link";
 import { getMonthName } from "@/lib/date-utils";
+import { getAuthorAvatarUrl } from "@/lib/utils/image-management";
 
 interface AuthorPageHeaderProps {
   author: Author & {
@@ -25,6 +27,16 @@ interface AuthorPageHeaderProps {
 }
 
 export function AuthorPageHeader({ author, className }: AuthorPageHeaderProps) {
+  const [imageError, setImageError] = useState(false);
+  // Use Cloudinary transformation for author image - larger size for profile page
+  const avatarUrl = getAuthorAvatarUrl(author.image, 300);
+  
+  // Handle image loading error
+  const handleImageError = () => {
+    console.warn(`Failed to load avatar image for author: ${author.name}`);
+    setImageError(true);
+  };
+
   // Format the birth date parts
   const hasBirthDate = author.bornMonth && author.bornDay;
   const birthMonth = author.bornMonth ? getMonthName(author.bornMonth, true) : null;
@@ -49,9 +61,16 @@ export function AuthorPageHeader({ author, className }: AuthorPageHeaderProps) {
     <Card className={className}>
       <CardContent className="p-6">
         <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-          {/* Author Avatar */}
+          {/* Author Avatar - updated with error handling */}
           <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-background">
-            <AvatarImage src={author.image || ""} alt={author.name} />
+            {!imageError && (
+              <AvatarImage 
+                src={avatarUrl} 
+                alt={author.name} 
+                className="object-cover" 
+                onError={handleImageError}
+              />
+            )}
             <AvatarFallback className="text-2xl">{author.name[0]}</AvatarFallback>
           </Avatar>
           

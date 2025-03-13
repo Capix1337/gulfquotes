@@ -171,6 +171,50 @@ export function getImagePublicId(url: string): string | null {
   }
 }
 
+// Add this type definition before the buildTransformationString function
+export type CloudinaryTransformValue = string | number | boolean;
+
+/**
+ * Builds a Cloudinary transformation string from an options object
+ */
+export function buildTransformationString(options: Record<string, CloudinaryTransformValue>): string {
+  return Object.entries(options)
+    .map(([key, value]) => `${key}_${value}`)
+    .join(',');
+}
+
+// Author avatar transformation presets
+export const authorAvatarTransforms = {
+  // Small avatar for lists and comments
+  small: {
+    width: 48,
+    height: 48,
+    crop: 'fill',
+    gravity: 'face',
+    quality: 'auto'
+  },
+  
+  // Medium avatar for cards and profile previews
+  medium: {
+    width: 200,
+    height: 200,
+    crop: 'fill',
+    gravity: 'face',
+    quality: 'auto',
+    fetchFormat: 'auto'
+  },
+  
+  // Large avatar for profile page headers
+  large: {
+    width: 400,
+    height: 400,
+    crop: 'fill',
+    gravity: 'face',
+    quality: 'auto',
+    fetchFormat: 'auto'
+  }
+};
+
 export const imageTransforms = {
   thumbnail: {
     width: 100,
@@ -240,5 +284,10 @@ export const imageTransforms = {
       quality: 'auto',
       format: 'webp',
     }
+  },
+  authorAvatars: {
+    small: buildTransformationString(authorAvatarTransforms.small),
+    medium: buildTransformationString(authorAvatarTransforms.medium),
+    large: buildTransformationString(authorAvatarTransforms.large)
   }
 } as const;
