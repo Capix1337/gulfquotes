@@ -41,6 +41,9 @@ export default async function NewQuotePage() {
         createdAt: true,
         updatedAt: true,
         followers: true,
+        // Add these missing external link fields
+        externalLinkTitle: true,
+        externalLinkUrl: true,
       },
       orderBy: {
         name: 'asc'
