@@ -41,6 +41,9 @@ export interface AuthorProfileWithDates extends AuthorProfile {
   diedMonth: number | null;
   diedYear: number | null;
   birthPlace: string | null;
+  // External link fields
+  externalLinkTitle: string | null;
+  externalLinkUrl: string | null;
   // Additional fields that may be included
   images?: {
     id: string;

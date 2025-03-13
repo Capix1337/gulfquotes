@@ -51,6 +51,9 @@ const baseSchema = z.object({
     .nullable().optional(),
   birthPlace: z.string().nullable().optional(),
   influences: z.string().nullable().optional(),
+  // Add external link fields
+  externalLinkTitle: z.string().nullable().optional(),
+  externalLinkUrl: z.string().url("Invalid URL format").nullable().optional(),
   slug: z.string().optional(),
   images: z.array(authorImageSchema).default([]),
 });
@@ -109,6 +112,18 @@ export const authorProfileBaseSchema = baseSchema
   }, {
     message: "Death date must be after birth date",
     path: ["diedYear"]
+  })
+  // Add the new refinement for external links
+  .refine((data) => {
+    // If one external link field is provided, the other must also be provided
+    if ((data.externalLinkTitle && !data.externalLinkUrl) || 
+        (!data.externalLinkTitle && data.externalLinkUrl)) {
+      return false;
+    }
+    return true;
+  }, {
+    message: "Both external link title and URL must be provided together",
+    path: ["externalLinkTitle"] // This indicates which field the error is associated with
   });
 
 // Schema for creating a new author profile

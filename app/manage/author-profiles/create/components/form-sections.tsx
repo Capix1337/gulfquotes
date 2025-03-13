@@ -406,6 +406,59 @@ export function FormSections({ form, disabled }: FormSectionsProps) {
         />
       </div>
 
+      {/* External Resources Section */}
+      <div className="space-y-4">
+        <div className="text-lg font-semibold">External Resources</div>
+        <p className="text-sm text-muted-foreground">
+          Add an external link for users to learn more about this author
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* External Link Title */}
+          <FormField
+            control={form.control}
+            name="externalLinkTitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Link Title</FormLabel>
+                <FormControl>
+                  <Input 
+                    disabled={disabled} 
+                    placeholder="e.g., Official Website, Wikipedia, Read more" 
+                    {...field}
+                    value={field.value ?? ''} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          {/* External Link URL */}
+          <FormField
+            control={form.control}
+            name="externalLinkUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Link URL</FormLabel>
+                <FormControl>
+                  <Input 
+                    disabled={disabled} 
+                    placeholder="https://example.com" 
+                    {...field}
+                    value={field.value ?? ''} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Both title and URL must be provided to display the external link on the author&apos;s page
+        </p>
+      </div>
+
       {/* Image upload section */}
       <CreateImageUpload 
         form={form} 

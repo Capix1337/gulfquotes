@@ -35,6 +35,9 @@ export function CreateForm() {
       birthPlace: "",
       influences: "",
       bio: "",
+      // Add external link fields
+      externalLinkTitle: "",
+      externalLinkUrl: "",
       images: [], 
     },
   });

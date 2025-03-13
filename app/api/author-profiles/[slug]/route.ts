@@ -118,6 +118,32 @@ export async function PATCH(req: Request): Promise<NextResponse<AuthorProfileRes
       }
     }
 
+    // Additional validation specifically for external links
+    if ((validatedData.data.externalLinkTitle && !validatedData.data.externalLinkUrl) || 
+        (!validatedData.data.externalLinkTitle && validatedData.data.externalLinkUrl)) {
+      return NextResponse.json({
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "Both external link title and URL must be provided together"
+        }
+      }, { status: 400 });
+    }
+
+    // URL format validation for external link
+    if (validatedData.data.externalLinkUrl) {
+      try {
+        // Basic URL validation beyond the schema validation
+        new URL(validatedData.data.externalLinkUrl);
+      } catch {
+        return NextResponse.json({
+          error: {
+            code: "VALIDATION_ERROR",
+            message: "Invalid external link URL format"
+          }
+        }, { status: 400 });
+      }
+    }
+
     // Validate images if present
     if (validatedData.data.images?.length) {
       // Check maximum images using the helper function
@@ -175,7 +201,10 @@ export async function PATCH(req: Request): Promise<NextResponse<AuthorProfileRes
       ? {
           ...updatedProfile,
           formattedBirthDate: formattedDates.birthDate,
-          formattedDeathDate: formattedDates.deathDate
+          formattedDeathDate: formattedDates.deathDate,
+          // Explicitly include external link fields to ensure they're in the response
+          externalLinkTitle: updatedProfile.externalLinkTitle,
+          externalLinkUrl: updatedProfile.externalLinkUrl
         }
       : updatedProfile;
 

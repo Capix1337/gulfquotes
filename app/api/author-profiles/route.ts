@@ -8,6 +8,7 @@ import type { AuthorProfileResponse, AuthorProfilesResponse } from "@/types/api/
 import { DuplicateAuthorProfileError, MaxImagesExceededError } from "@/lib/services/errors/author-profile.errors";
 import { cloudinaryConfig, getMaxFiles } from "@/lib/cloudinary";
 import { AuthorProfileWithDates } from "@/lib/services/interfaces/author-profile-service.interface";
+import { AuthorProfile } from "@prisma/client";
 
 // GET handler for listing author profiles
 export async function GET(req: Request): Promise<NextResponse<AuthorProfilesResponse>> {
@@ -171,11 +172,43 @@ export async function POST(req: Request): Promise<NextResponse<AuthorProfileResp
       }
     }
 
+    // Additional validation specifically for external links
+    if ((validatedData.data.externalLinkTitle && !validatedData.data.externalLinkUrl) || 
+        (!validatedData.data.externalLinkTitle && validatedData.data.externalLinkUrl)) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "VALIDATION_ERROR",
+            message: "Both external link title and URL must be provided together"
+          }
+        },
+        { status: 400 }
+      );
+    }
+
+    // URL format validation for external link
+    if (validatedData.data.externalLinkUrl) {
+      try {
+        // Basic URL validation beyond the schema validation
+        new URL(validatedData.data.externalLinkUrl);
+      } catch {
+        return NextResponse.json(
+          {
+            error: {
+              code: "VALIDATION_ERROR",
+              message: "Invalid external link URL format"
+            }
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     // Create author profile with images and new date fields
     const authorProfile = await authorProfileService.create(validatedData.data);
 
     // Format the response to include formatted date strings alongside structured date fields
-    let formattedResponse;
+    let formattedResponse = authorProfile;
     if (authorProfile) {
       // Cast the entire authorProfile object to AuthorProfileWithDates since it has all the required fields
       const profileWithDates = authorProfile as unknown as AuthorProfileWithDates;
@@ -188,14 +221,18 @@ export async function POST(req: Request): Promise<NextResponse<AuthorProfileResp
         formattedResponse = {
           ...authorProfile,
           formattedBirthDate: formattedDates.birthDate,
-          formattedDeathDate: formattedDates.deathDate
+          formattedDeathDate: formattedDates.deathDate,
+          // Explicitly include external link fields to ensure they're in the response
+          externalLinkTitle: authorProfile.externalLinkTitle,
+          externalLinkUrl: authorProfile.externalLinkUrl
+        } as AuthorProfile & {
+          formattedBirthDate: string | null;
+          formattedDeathDate: string | null;
         };
-      } else {
-        formattedResponse = authorProfile;
       }
     }
 
-    return NextResponse.json({ data: formattedResponse || authorProfile });
+    return NextResponse.json({ data: formattedResponse });
 
   } catch (error: unknown) {
     console.error("[AUTHOR_PROFILES_POST]", error);

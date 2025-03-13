@@ -150,28 +150,31 @@ model Category {
 }
 
 model AuthorProfile {
-  id            String        @id @default(cuid())
-  name          String
-  born          String?       // Keep existing field for now
-  died          String?       // Keep existing field for now
+  id              String        @id @default(cuid())
+  name            String
+  born            String?       
+  died            String?       
   // New structured date fields
-  bornDay       Int?
-  bornMonth     Int?
-  bornYear      Int?
-  diedDay       Int?
-  diedMonth     Int?
-  diedYear      Int?
-  birthPlace    String?       // Add birthplace field
-  influences    String?
-  bio           String        @db.Text
-  slug          String        @unique
-  followers     Int           @default(0)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  images        AuthorImage[]
-  quotes        Quote[]
-  userFollowers AuthorFollow[]
-  notifications Notification[]
+  bornDay         Int?
+  bornMonth       Int?
+  bornYear        Int?
+  diedDay         Int?
+  diedMonth       Int?
+  diedYear        Int?
+  birthPlace      String?       
+  influences      String?
+  bio             String        @db.Text
+  // Add external link fields
+  externalLinkTitle String?     // Title/label for the external link
+  externalLinkUrl   String?     // URL for the external link
+  slug            String        @unique
+  followers       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  images          AuthorImage[]
+  quotes          Quote[]
+  userFollowers   AuthorFollow[]
+  notifications   Notification[]
 
   @@map("author_profiles")
 }

@@ -147,7 +147,7 @@ class AuthorProfileServiceImpl implements AuthorProfileService {
       }
 
       return await db.$transaction(async (tx) => {
-        // Create author profile with new date fields
+        // Create author profile with new date fields and external link fields
         const profile = await tx.authorProfile.create({
           data: {
             name: data.name,
@@ -164,6 +164,9 @@ class AuthorProfileServiceImpl implements AuthorProfileService {
             birthPlace: data.birthPlace,
             influences: data.influences,
             bio: data.bio,
+            // Add new external link fields
+            externalLinkTitle: data.externalLinkTitle,
+            externalLinkUrl: data.externalLinkUrl,
             slug,
           },
         });
@@ -204,7 +207,7 @@ class AuthorProfileServiceImpl implements AuthorProfileService {
         data.slug = newSlug;
       }
 
-      // Handle image updates if provided - FIX HERE
+      // Handle image updates if provided
       if (data.images) {
         // Check if the images have actually changed by comparing URLs
         const existingImageUrls = existing.images?.map(img => img.url) || [];
@@ -232,6 +235,9 @@ class AuthorProfileServiceImpl implements AuthorProfileService {
                 birthPlace: data.birthPlace,
                 influences: data.influences,
                 bio: data.bio,
+                // Add external link fields
+                externalLinkTitle: data.externalLinkTitle,
+                externalLinkUrl: data.externalLinkUrl,
                 slug: data.slug,
               },
             });
@@ -272,6 +278,9 @@ class AuthorProfileServiceImpl implements AuthorProfileService {
           birthPlace: data.birthPlace,
           influences: data.influences,
           bio: data.bio,
+          // Add external link fields
+          externalLinkTitle: data.externalLinkTitle,
+          externalLinkUrl: data.externalLinkUrl,
           slug: data.slug,
         },
       });
