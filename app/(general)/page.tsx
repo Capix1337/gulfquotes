@@ -20,8 +20,6 @@ export default function Home() {
               {/* Daily Quote - Updated to use the new component */}
               <DailyQuoteSidebar />
               <p>Testing and update</p>
-
-              {/* Random Quote - Replace Your Progress card */}
               <RandomQuoteSidebar />
 
               {/* Other sidebar widgets */}
