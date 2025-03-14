@@ -55,7 +55,7 @@ jobs:
             npm install
             
             # Attempt to build, and rollback if it fails
-            if npm run build; then
+            if npx cross-env NEXTAUTH_URL=https://gulfquotes.ae AUTH_TRUST_HOST=true npm run build; then
               echo "Build successful, deploying new version"
               
               # Run database migrations (NEW)
