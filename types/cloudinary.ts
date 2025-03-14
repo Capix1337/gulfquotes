@@ -15,7 +15,7 @@ export type MediaLibraryErrorCode =
   | "UPDATE_METADATA_FAILED"
   | "DELETE_IMAGE_FAILED";
 
-// Base resource interface
+
 export interface CloudinaryResource {
   public_id: string;
   secure_url: string;

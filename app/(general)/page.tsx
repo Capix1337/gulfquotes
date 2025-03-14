@@ -19,6 +19,7 @@ export default function Home() {
             <div className="space-y-6">
               {/* Daily Quote - Updated to use the new component */}
               <DailyQuoteSidebar />
+              <p>Testing and update</p>
 
               {/* Random Quote - Replace Your Progress card */}
               <RandomQuoteSidebar />
