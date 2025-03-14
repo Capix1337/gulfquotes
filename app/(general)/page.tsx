@@ -19,7 +19,6 @@ export default function Home() {
             <div className="space-y-6">
               {/* Daily Quote - Updated to use the new component */}
               <DailyQuoteSidebar />
-              <p>Testing and update</p>
               <RandomQuoteSidebar />
 
               {/* Other sidebar widgets */}
