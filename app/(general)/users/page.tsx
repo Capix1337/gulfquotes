@@ -19,7 +19,7 @@ interface PageProps {
 export default async function UsersPage({ searchParams }: PageProps) {
   const session = await auth();
   if (!session?.user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   // Await the searchParams promise before using it.

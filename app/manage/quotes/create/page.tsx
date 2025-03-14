@@ -11,7 +11,7 @@ import type { QuoteFormData } from "@/schemas/quote";
 export default async function NewQuotePage() {
   const session = await auth();
   if (!session?.user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   if (session.user.role !== "ADMIN" && session.user.role !== "AUTHOR") {

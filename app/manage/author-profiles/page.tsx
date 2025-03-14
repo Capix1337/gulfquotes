@@ -15,7 +15,7 @@ export default async function AuthorProfilesPage() {
   const session = await auth();
   
   if (!session?.user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   const result = await authorProfileService.list({

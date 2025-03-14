@@ -16,7 +16,7 @@ export default async function QuotesPage() {
   const session = await auth();
   
   if (!session?.user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   try {

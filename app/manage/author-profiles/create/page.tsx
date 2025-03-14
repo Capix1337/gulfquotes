@@ -14,7 +14,7 @@ export default async function CreateAuthorProfilePage() {
   const session = await auth();
   
   if (!session?.user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   if (session.user.role !== "ADMIN") {

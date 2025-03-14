@@ -60,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/login`,
+      url: `${baseUrl}/auth/login`,
       lastModified: currentDate,
       changeFrequency: "monthly" as const,
       priority: 0.5,

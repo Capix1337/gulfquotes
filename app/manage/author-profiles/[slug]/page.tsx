@@ -31,7 +31,7 @@ export default async function EditAuthorProfilePage({
   const session = await auth();
   
   if (!session?.user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   if (session.user.role !== "ADMIN") {

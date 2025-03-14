@@ -30,7 +30,7 @@ export default async function EditQuotePage({
   // Check for an authenticated session
   const session = await auth();
   if (!session?.user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   // Only ADMINs or AUTHORS are allowed for quote editing

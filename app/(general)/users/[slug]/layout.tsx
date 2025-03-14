@@ -15,7 +15,7 @@ export default async function UserLayout({ children, params: paramsPromise }: Us
   
   const session = await auth();
   if (!session?.user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   try {
