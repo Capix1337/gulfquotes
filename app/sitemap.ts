@@ -59,18 +59,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily" as const,
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/auth/login`,
-      lastModified: currentDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/register`,
-      lastModified: currentDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    }
+    // {
+    //   url: `${baseUrl}/auth/login`,
+    //   lastModified: currentDate,
+    //   changeFrequency: "monthly" as const,
+    //   priority: 0.5,
+    // },
+    // {
+    //   url: `${baseUrl}/register`,
+    //   lastModified: currentDate,
+    //   changeFrequency: "monthly" as const,
+    //   priority: 0.5,
+    // }
   ];
   
   // Fetch all dynamic content concurrently to optimize performance
