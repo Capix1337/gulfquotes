@@ -35,11 +35,9 @@ jobs:
           TARGET_DIR: /var/www/gulfquotes
           APP_NAME: gulfquotes #should match the name of the server block
           PORT: 3000
-          #if multiple deploys are needed from different branches
-          # TARGET_DIR: 
         run: |
           ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << EOF
-            export PATH=/root/.nvm/versions/node/v22.14.0/bin:$PATH #'which pm2' command on terminal will give the right path
+            export PATH=/root/.nvm/versions/node/v22.14.0/bin:$PATH 
             cd $TARGET_DIR
             
             # Store current commit hash before pulling
@@ -59,6 +57,11 @@ jobs:
             # Attempt to build, and rollback if it fails
             if npm run build; then
               echo "Build successful, deploying new version"
+              
+              # Run database migrations (NEW)
+              echo "Running database migrations..."
+              npx prisma generate --no-engine
+              npx prisma migrate deploy
               
               if pm2 list | grep -q $APP_NAME; then
                 echo "Restarting application: $APP_NAME"
