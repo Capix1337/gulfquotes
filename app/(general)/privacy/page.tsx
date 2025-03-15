@@ -103,7 +103,7 @@ const PrivacyPolicyPage = () => {
           If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at:
         </p>
         <p className="mb-4">
-          Email: <a href="mailto:info@gulfquotes.com" className="text-blue-500 underline">info@gulfquotes.com</a><br />
+          Email: <a href="mailto:info@gulfquotes.ae" className="text-blue-500 underline">info@gulfquotes.ae</a><br />
         </p>
         <p className="mb-4">
           By using Gulfquotes, you acknowledge that you have read and understand this Privacy Policy and agree to its terms.

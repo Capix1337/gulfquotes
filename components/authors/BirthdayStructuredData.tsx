@@ -44,7 +44,7 @@ export function BirthdayStructuredData({ day, month, authors, totalAuthors }: Bi
             "description": author.bio || undefined,
             "birthDate": author.born || undefined,
             "deathDate": author.died || undefined,
-            "url": `https://gulfquotes.com/authors/${author.slug}`,
+            "url": `https://gulfquotes.ae/authors/${author.slug}`,
             "image": author.image || undefined
           }
         })),
@@ -58,7 +58,7 @@ export function BirthdayStructuredData({ day, month, authors, totalAuthors }: Bi
       "isPartOf": {
         "@type": "WebSite",
         "name": "gulfquotes",
-        "url": "https://gulfquotes.com"
+        "url": "https://gulfquotes.ae"
       }
     };
     

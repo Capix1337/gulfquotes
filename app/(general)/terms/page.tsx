@@ -84,7 +84,7 @@ const TermsOfServicePage = () => {
           If you have any questions, concerns, or comments regarding these Terms, please contact us at:
         </p>
         <p className="mb-4">
-          Email: <a href="mailto:info@gulfquotes.com" className="text-blue-500 underline">info@gulfquotes.com</a><br />
+          Email: <a href="mailto:info@gulfquotes.ae" className="text-blue-500 underline">info@gulfquotes.ae</a><br />
         </p>
         <p className="mb-4">
           By using Gulfquotes, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.

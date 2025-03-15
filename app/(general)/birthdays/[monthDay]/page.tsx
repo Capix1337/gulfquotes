@@ -61,10 +61,10 @@ export async function generateMetadata({
         title: `Authors Born on ${formattedDate}`,
         description: `Explore quotes and wisdom from famous authors, philosophers, and personalities born on ${formattedDate}.`,
         type: 'website',
-        url: `https://gulfquotes.com${canonicalPath}`,
+        url: `https://gulfquotes.ae${canonicalPath}`,
         images: [
           {
-            url: `https://gulfquotes.com/api/og?title=Authors+Born+on+${encodeURIComponent(formattedDate)}&date=${currentYear}`,
+            url: `https://gulfquotes.ae/api/og?title=Authors+Born+on+${encodeURIComponent(formattedDate)}&date=${currentYear}`,
             width: 1200,
             height: 630,
             alt: `Authors born on ${formattedDate}`,
@@ -77,7 +77,7 @@ export async function generateMetadata({
         card: 'summary_large_image',
         title: `Authors Born on ${formattedDate} | gulfquotes`,
         description: `Discover quotes from authors born on ${formattedDate}.`,
-        images: [`https://gulfquotes.com/api/og?title=Authors+Born+on+${encodeURIComponent(formattedDate)}&date=${currentYear}`],
+        images: [`https://gulfquotes.ae/api/og?title=Authors+Born+on+${encodeURIComponent(formattedDate)}&date=${currentYear}`],
       },
     };
   } catch (error) {
