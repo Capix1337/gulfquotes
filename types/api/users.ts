@@ -75,7 +75,7 @@ export interface ProfilePrivacySettings {
   showActivity: boolean;
 }
 
-// Enhanced User specific types
+
 export interface UserProfileData {
   username: string | null;
   bio: string | null;
