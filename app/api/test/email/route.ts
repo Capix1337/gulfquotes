@@ -12,7 +12,7 @@ export async function GET() {
     
     // Try a simple text-only email to avoid React template issues
     const result = await resend.emails.send({
-      from: 'gulfquotes <onboarding@resend.dev>',
+      from: 'gulfquotes <support@gulfquotes.ae>',
       to: 'chinedu02k@gmail.com', // Your email address
       subject: 'Test Email - API Debug',
       text: 'This is a plain text email to debug the API connection.',

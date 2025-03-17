@@ -13,7 +13,7 @@ export async function sendVerificationEmail(
   const confirmLink = `${domain}/auth/new-verification?token=${token}`
 
   await resend.emails.send({
-    from: 'gulfquotes <onboarding@resend.dev>',
+    from: 'gulfquotes <onboarding@gulfquotes.ae>',
     to: email,
     subject: 'Confirm your email',
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
@@ -27,7 +27,7 @@ export async function sendPasswordResetEmail(
   const resetLink = `${domain}/auth/new-password?token=${token}`
 
   await resend.emails.send({
-    from: 'gulfquotes <onboarding@resend.dev>',
+    from: 'gulfquotes <support@gulfquotes.ae>',
     to: email,
     subject: 'Reset your password',
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`
@@ -39,7 +39,7 @@ export async function sendTwoFactorTokenEmail(
   token: string,
 ) {
   await resend.emails.send({
-    from: 'gulfquotes <onboarding@resend.dev>',
+    from: 'gulfquotes <support@gulfquotes.ae>',
     to: email,
     subject: '2FA Code',
     html: `<p>Your 2FA Code: ${token}</p>`
@@ -94,7 +94,7 @@ export async function sendNewQuoteEmail(
     
     // Send the email
     const result = await resend.emails.send({
-      from: 'gulfquotes <onboarding@resend.dev>',
+      from: 'gulfquotes <notification@gulfquotes.ae>',
       to: email,
       subject,
       html,
