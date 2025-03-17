@@ -11,7 +11,6 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <HeroSection />
-      <p>see upload</p>
       <div className="container px-4 md:px-6 py-6 md:py-16 space-y-16">
         <PopularCategories />
         <TrendingQuotes />
