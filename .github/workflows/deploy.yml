@@ -60,7 +60,7 @@ jobs:
               
               # Run database migrations (NEW)
               echo "Running database migrations..."
-              npx prisma generate --no-engine
+              npx prisma generate
               npx prisma migrate deploy
               
               if pm2 list | grep -q $APP_NAME; then
