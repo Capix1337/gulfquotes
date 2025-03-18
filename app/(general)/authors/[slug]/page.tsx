@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { authorProfileService } from "@/lib/services/author-profile.service";
 import { authorFollowService } from "@/lib/services/follow";
 import { AuthorPageHeader } from "@/components/authors/AuthorPageHeader";
-import { AuthorGallery } from "@/components/authors/AuthorGallery";
+// import { AuthorGallery } from "@/components/authors/AuthorGallery";
 import { AuthorBioSection } from "@/components/authors/AuthorBioSection";
 import { AuthorQuotesList } from "@/components/authors/AuthorQuotesList";
 import type { Metadata } from "next";
@@ -110,13 +110,13 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
             externalLinkUrl={author.externalLinkUrl}
           />
         </Suspense>
-        
+{/*         
         <Suspense fallback={<div>Loading author gallery...</div>}>
           <AuthorGallery 
             images={author.images.map(img => ({ id: img.id || String(Math.random()), url: img.url }))} 
             authorName={author.name} 
           />
-        </Suspense>
+        </Suspense> */}
         
         <Suspense fallback={<div>Loading author quotes...</div>}>
           <AuthorQuotesList 
