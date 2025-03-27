@@ -12,7 +12,8 @@ import {
   LayoutDashboard,
   Image,
   Mail,
-  Search
+  Search,
+  BookMarked // Add this import for the category icon
 } from "lucide-react";
 
 // Define props interface for type safety
@@ -46,22 +47,30 @@ const navItems = [
     href: "/manage/author-profiles",
     icon: Users
   },
+  // Add the new "Manage Categories" navigation item here
+  {
+    title: "Manage Categories",
+    href: "/manage/categories",
+    icon: BookMarked,
+    admin: true // Only visible to admins
+  },
   {
     title: "Media Gallery",
     href: "/manage/gallery",
     icon: Image
   },
+  // Rest of the navigation items remain unchanged
   {
     title: "Email Dashboard",
     href: "/manage/email-dashboard",
     icon: Mail,
-    admin: true // Only show to admin
+    admin: true 
   },
   {
     title: "Search Analytics",
     href: "/manage/analytics/search",
     icon: Search,
-    admin: true // Only show to admin
+    admin: true 
   },
   {
     title: "Settings",
