@@ -5,8 +5,8 @@ import { auth } from "@/auth";
 import { quoteTagService } from "@/lib/services/public-quote/quote-tag.service";
 import { TagHeader } from "@/components/tags/TagHeader";
 import { TagQuotesList } from "@/components/tags/TagQuotesList";
-import { CategoryPagination } from "@/components/categories/CategoryPagination";
-import { CategorySort } from "@/components/categories/CategorySort";
+import { TagPagination } from "@/components/tags/TagPagination";
+import { TagSort } from "@/components/tags/TagSort";
 
 // Define search params interface
 interface TagSearchParams {
@@ -92,7 +92,7 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
           <TagHeader tag={tag} />
           
           {/* Filter & Sort Controls */}
-          <CategorySort 
+          <TagSort 
             sort={sort}
             total={quotesData.total}
             count={quotesData.quotes.length}
@@ -108,7 +108,7 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
           
           {/* Pagination */}
           {totalPages > 1 && (
-            <CategoryPagination 
+            <TagPagination 
               totalPages={totalPages} 
               currentPage={page}
               className="pt-4"
