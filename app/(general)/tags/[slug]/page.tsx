@@ -4,7 +4,7 @@ import { Shell } from "@/components/shells/shell";
 import { auth } from "@/auth";
 import { quoteTagService } from "@/lib/services/public-quote/quote-tag.service";
 import { TagHeader } from "@/components/tags/TagHeader";
-import { CategoryQuotesList } from "@/components/categories/CategoryQuotesList";
+import { TagQuotesList } from "@/components/tags/TagQuotesList";
 import { CategoryPagination } from "@/components/categories/CategoryPagination";
 import { CategorySort } from "@/components/categories/CategorySort";
 
@@ -99,10 +99,11 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
           />
           
           {/* Quotes List */}
-          <CategoryQuotesList 
+          <TagQuotesList 
             quotes={quotesData.quotes} 
             isLoading={false}
             emptyMessage={`No quotes found with the #${tag.name} tag`}
+            tagSlug={tag.slug}
           />
           
           {/* Pagination */}
