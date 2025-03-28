@@ -88,10 +88,11 @@ class TagServiceImpl implements TagService {
       // Build where clause based on search parameter
       const where: Prisma.TagWhereInput = {};
       if (search) {
-        where.OR = [
-          { name: { contains: search, mode: 'insensitive' } },
-          { description: { contains: search, mode: 'insensitive' } }
-        ];
+        // Remove description from search since it doesn't exist in the model
+        where.name = { 
+          contains: search, 
+          mode: 'insensitive' 
+        };
       }
 
       // Build orderBy based on sortBy and order parameters
@@ -212,7 +213,7 @@ class TagServiceImpl implements TagService {
   }
 
   /**
-   * Search tags by name or description
+   * Search tags by name
    */
   async search(query: string, limit = 10): Promise<TagWithQuoteCount[]> {
     if (!query.trim()) {
@@ -221,10 +222,8 @@ class TagServiceImpl implements TagService {
 
     const tags = await db.tag.findMany({
       where: {
-        OR: [
-          { name: { contains: query, mode: 'insensitive' } },
-          { description: { contains: query, mode: 'insensitive' } }
-        ]
+        // Remove description from search since it doesn't exist in the model
+        name: { contains: query, mode: 'insensitive' }
       },
       include: {
         _count: {

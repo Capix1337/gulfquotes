@@ -115,6 +115,18 @@ class QuoteTagService {
                 name: true,
                 slug: true
               }
+            },
+            gallery: {  // Added this inclusion
+              include: {
+                gallery: true
+              }
+            },
+            tags: {  // Also include tags for completeness
+              select: {
+                id: true,
+                name: true,
+                slug: true
+              }
             }
           },
           skip,
@@ -141,6 +153,11 @@ class QuoteTagService {
           images: undefined,
           quoteCount: quote.authorProfile._count.quotes
         },
+        gallery: quote.gallery.map(g => ({  // Add the gallery property transformation
+          gallery: g.gallery,
+          isActive: g.isActive,
+          isBackground: g.isActive && g.gallery.url === quote.backgroundImage
+        })),
         isLiked: false,
         isBookmarked: false
       })) as QuoteDisplayData[];

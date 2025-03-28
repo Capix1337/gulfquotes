@@ -32,11 +32,7 @@ export function TagHeader({ tag, className }: TagHeaderProps) {
           </Badge>
         </div>
         
-        {tag.description && (
-          <p className="text-muted-foreground">
-            {tag.description}
-          </p>
-        )}
+        {/* Removed the description section as it's not in the Tag model */}
       </CardContent>
     </Card>
   );
