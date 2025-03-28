@@ -72,13 +72,60 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     //   priority: 0.5,
     // }
   ];
+
+  // Get dynamic routes from database
   
-  // Fetch all dynamic content concurrently to optimize performance
+  // Fetch all tags
+  const tags = await prisma.tag.findMany({
+    where: {
+      // Only include tags that have quotes
+      quotes: {
+        some: {}
+      }
+    },
+    select: {
+      slug: true,
+      updatedAt: true,
+      _count: {
+        select: {
+          quotes: true
+        }
+      }
+    },
+    orderBy: {
+      quotes: {
+        _count: 'desc' // Order by popularity (most quotes first)
+      }
+    }
+  });
+
+  // Create tag routes - calculate priority based on number of quotes
+  const tagRoutes = tags.map((tag) => {
+    // Calculate a priority between 0.5 and 0.8 based on quote count
+    // More quotes = higher priority
+    const maxQuotes = Math.max(...tags.map(t => t._count.quotes));
+    const normalizedCount = tag._count.quotes / maxQuotes;
+    const priority = Math.max(0.5, Math.min(0.8, 0.5 + (normalizedCount * 0.3)));
+    
+    // Determine change frequency based on quote count
+    // Tags with more quotes might be updated more frequently
+    const changeFrequency = tag._count.quotes > 20 
+      ? "weekly" 
+      : "monthly";
+      
+    return {
+      url: `${baseUrl}/tags/${tag.slug}`,
+      lastModified: tag.updatedAt || currentDate,
+      changeFrequency: changeFrequency as "weekly" | "monthly",
+      priority: parseFloat(priority.toFixed(2)),
+    };
+  });
+
+  // Fetch other dynamic routes from your existing implementation
   const [
     authorProfiles,
     quotes,
     categories,
-    tags,
     authorBirthdays,
     trendingQuotes
   ] = await Promise.all([
@@ -109,14 +156,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     
     // Categories
     prisma.category.findMany({
-      select: {
-        slug: true,
-        updatedAt: true,
-      },
-    }),
-    
-    // Tags
-    prisma.tag.findMany({
       select: {
         slug: true,
         updatedAt: true,
@@ -186,14 +225,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: category.updatedAt,
     changeFrequency: "weekly" as const,
     priority: 0.6,
-  }));
-  
-  // Generate routes for tags
-  const tagRoutes = tags.map((tag) => ({
-    url: `${baseUrl}/tags/${tag.slug}`,
-    lastModified: tag.updatedAt,
-    changeFrequency: "weekly" as const,
-    priority: 0.5,
   }));
   
   // Create routes for birthday pages that have authors

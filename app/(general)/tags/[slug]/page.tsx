@@ -3,10 +3,14 @@ import { notFound } from "next/navigation";
 import { Shell } from "@/components/shells/shell";
 import { auth } from "@/auth";
 import { quoteTagService } from "@/lib/services/public-quote/quote-tag.service";
+import { tagService } from "@/lib/services/tag/tag.service";
 import { TagHeader } from "@/components/tags/TagHeader";
 import { TagQuotesList } from "@/components/tags/TagQuotesList";
 import { TagPagination } from "@/components/tags/TagPagination";
 import { TagSort } from "@/components/tags/TagSort";
+import { Suspense } from "react";
+import { TagsLoadingSkeleton } from "./loading";
+import { absoluteUrl } from "@/lib/utils";
 
 // Define search params interface
 interface TagSearchParams {
@@ -32,18 +36,85 @@ export async function generateMetadata({
     // Fetch tag data for metadata
     const tag = await quoteTagService.getTagBySlug(slug);
     
+    // Get tag quote count
+    const quoteCount = tag._count?.quotes || 0;
+    
+    // Create a meaningful description that includes the quote count
+    const description = `Explore ${quoteCount} quotes tagged with #${tag.name}. Find inspiring, motivating, and thought-provoking quotes from influential figures on gulfquotes.`;
+    
+    // Format tag name for titles
+    const formattedTagName = tag.name.charAt(0).toUpperCase() + tag.name.slice(1);
+    
+    // Create canonical URL
+    const canonicalUrl = absoluteUrl(`/tags/${slug}`);
+    
     return {
-      title: `#${tag.name} Quotes | gulfquotes`,
-      description: `Browse our collection of quotes tagged with #${tag.name}`,
+      title: `#${formattedTagName} Quotes | ${quoteCount} Quotes Tagged with ${formattedTagName}`,
+      description,
+      openGraph: {
+        title: `#${formattedTagName} Quotes | gulfquotes`,
+        description,
+        url: canonicalUrl,
+        siteName: 'gulfquotes',
+        type: 'website',
+        locale: 'en_US',
+        images: [
+          {
+            url: absoluteUrl('/og-image.jpg'),
+            width: 1200,
+            height: 630,
+            alt: `Quotes tagged with #${tag.name}`,
+          }
+        ]
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `#${formattedTagName} Quotes | gulfquotes`,
+        description,
+        images: [absoluteUrl('/og-image.jpg')],
+        creator: '@gulfquotes',
+        site: '@gulfquotes'
+      },
+      alternates: {
+        canonical: canonicalUrl,
+      },
+      keywords: [`${tag.name} quotes`, 'quotes', 'inspirational quotes', tag.name, 'gulf quotes'],
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+        }
+      }
     };
   } catch (error) {
     // Log the error for debugging
     console.error("[TAG_METADATA]", error);
     
     // Return fallback metadata
+    const formattedTagName = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    
     return {
-      title: `#${slug.replace(/-/g, ' ')} Quotes | gulfquotes`,
-      description: `Browse our collection of quotes tagged with #${slug.replace(/-/g, ' ')}`,
+      title: `#${formattedTagName} Quotes | gulfquotes`,
+      description: `Browse our collection of quotes tagged with #${formattedTagName}`,
+      openGraph: {
+        title: `#${formattedTagName} Quotes | gulfquotes`,
+        description: `Browse our collection of quotes tagged with #${formattedTagName}`,
+        url: absoluteUrl(`/tags/${slug}`),
+        siteName: 'gulfquotes',
+        locale: 'en_US',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary',
+        title: `#${formattedTagName} Quotes | gulfquotes`,
+        description: `Browse our collection of quotes tagged with #${formattedTagName}`,
+      },
+      robots: {
+        index: true,
+        follow: true,
+      }
     };
   }
 }
@@ -62,8 +133,11 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
   const limit = Number(resolvedSearchParams?.limit) || 12;
   
   try {
-    // Fetch the tag data
-    const tag = await quoteTagService.getTagBySlug(slug);
+    // Fetch the tag data and related tags in parallel
+    const [tag, relatedTags] = await Promise.all([
+      quoteTagService.getTagBySlug(slug),
+      tagService.getRelatedTags(slug, 5).catch(() => []) // Get related tags but don't fail if this errors
+    ]);
     
     if (!tag) {
       notFound();
@@ -98,21 +172,40 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
             count={quotesData.quotes.length}
           />
           
-          {/* Quotes List */}
-          <TagQuotesList 
-            quotes={quotesData.quotes} 
-            isLoading={false}
-            emptyMessage={`No quotes found with the #${tag.name} tag`}
-            tagSlug={tag.slug}
-          />
-          
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <TagPagination 
-              totalPages={totalPages} 
-              currentPage={page}
-              className="pt-4"
+          <Suspense fallback={<TagsLoadingSkeleton />}>
+            {/* Quotes List */}
+            <TagQuotesList 
+              quotes={quotesData.quotes} 
+              isLoading={false}
+              emptyMessage={`No quotes found with the #${tag.name} tag`}
             />
+            
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <TagPagination 
+                totalPages={totalPages} 
+                currentPage={page}
+                className="pt-4"
+              />
+            )}
+          </Suspense>
+          
+          {/* Show related tags if available */}
+          {relatedTags && relatedTags.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-lg font-semibold mb-3">Related Tags</h2>
+              <div className="flex flex-wrap gap-2">
+                {relatedTags.map(tag => (
+                  <a
+                    key={tag.id}
+                    href={`/tags/${tag.slug}`}
+                    className="inline-flex items-center px-3 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-sm"
+                  >
+                    #{tag.name}
+                  </a>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       </Shell>

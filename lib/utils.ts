@@ -116,3 +116,20 @@ export function formatBirthdate(day: number, month: number, year?: number | null
   
   return `${monthName} ${day}`;
 }
+
+/**
+ * Creates an absolute URL from a relative path using the APP_URL from environment variables
+ * @param path - The relative path to convert to an absolute URL
+ */
+export function absoluteUrl(path: string): string {
+  // Use environment variable for the base URL
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  
+  // Remove trailing slash from baseUrl if present
+  const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  
+  // Add leading slash to path if not present
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  
+  return `${normalizedBaseUrl}${normalizedPath}`;
+}

@@ -9,7 +9,7 @@ interface TagQuotesListProps {
   isLoading?: boolean;
   emptyMessage?: string;
   className?: string;
-  tagSlug?: string;
+  // Remove tagSlug from the interface if we're not using it
 }
 
 export function TagQuotesList({
@@ -17,7 +17,7 @@ export function TagQuotesList({
   isLoading = false,
   emptyMessage = "No quotes found with this tag",
   className,
-  tagSlug,
+  // Remove tagSlug from the parameters if we're not using it
 }: TagQuotesListProps) {
   return (
     <div className={cn("space-y-6", className)}>
